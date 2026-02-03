@@ -2,24 +2,32 @@ import { useState, useRef } from 'react'
 import { motion, useInView, AnimatePresence } from 'framer-motion'
 import { clsx } from 'clsx'
 import { twMerge } from 'tailwind-merge'
+import * as Icons from 'lucide-react'
 
-// SafeIcon Component - handles all Lucide icons
+// SafeIcon Component - Proper implementation for Vite
 const SafeIcon = ({ name, size = 24, className, color }) => {
-  const iconMap = {
+  // Map kebab-case names to PascalCase component names
+  const iconNameMap = {
     'sword': 'Sword',
     'shield': 'Shield',
+    'shield-check': 'ShieldCheck',
     'zap': 'Zap',
     'trophy': 'Trophy',
     'users': 'Users',
+    'user': 'User',
     'trending-up': 'TrendingUp',
+    'trending-down': 'TrendingDown',
     'activity': 'Activity',
     'radio': 'Radio',
     'message-square': 'MessageSquare',
+    'message-circle': 'MessageCircle',
     'calculator': 'Calculator',
     'menu': 'Menu',
     'x': 'X',
     'chevron-right': 'ChevronRight',
     'chevron-down': 'ChevronDown',
+    'chevron-left': 'ChevronLeft',
+    'chevron-up': 'ChevronUp',
     'search': 'Search',
     'filter': 'Filter',
     'eye': 'Eye',
@@ -46,25 +54,45 @@ const SafeIcon = ({ name, size = 24, className, color }) => {
     'gamepad-2': 'Gamepad2',
     'monitor': 'Monitor',
     'video': 'Video',
-    'message-circle': 'MessageCircle',
     'thumbs-up': 'ThumbsUp',
     'thumbs-down': 'ThumbsDown',
     'more-horizontal': 'MoreHorizontal',
     'settings': 'Settings',
-    'user': 'User',
     'log-in': 'LogIn',
-    'log-out': 'LogOut'
+    'log-out': 'LogOut',
+    'bot': 'Bot',
+    'help-circle': 'HelpCircle',
+    'arrow-right': 'ArrowRight',
+    'arrow-left': 'ArrowLeft',
+    'arrow-up': 'ArrowUp',
+    'arrow-down': 'ArrowDown',
+    'check': 'Check',
+    'copy': 'Copy',
+    'download': 'Download',
+    'edit': 'Edit',
+    'file': 'File',
+    'folder': 'Folder',
+    'globe': 'Globe',
+    'home': 'Home',
+    'image': 'Image',
+    'link': 'Link',
+    'lock': 'Lock',
+    'mail': 'Mail',
+    'map-pin': 'MapPin',
+    'phone': 'Phone',
+    'save': 'Save',
+    'sun': 'Sun',
+    'moon': 'Moon',
+    'trash': 'Trash',
+    'upload': 'Upload',
+    'wifi': 'Wifi',
+    'bell': 'Bell'
   }
   
-  const pascalName = iconMap[name] || 'HelpCircle'
+  const pascalName = iconNameMap[name] || 'HelpCircle'
+  const IconComponent = Icons[pascalName] || Icons.HelpCircle
   
-  try {
-    const LucideIcons = require('lucide-react')
-    const IconComponent = LucideIcons[pascalName] || LucideIcons.HelpCircle
-    return <IconComponent size={size} className={className} color={color} />
-  } catch (e) {
-    return <span className={className}>●</span>
-  }
+  return <IconComponent size={size} className={className} color={color} />
 }
 
 // Utility for tailwind class merging
@@ -273,8 +301,8 @@ function App() {
             </div>
             
             <div className="hidden lg:flex items-center space-x-4">
-              <button className="bg-dota-gray hover:bg-dota-red/20 text-white px-4 py-2 rounded-lg font-semibold transition-all border border-dota-red/30 hover:border-dota-red">
-                <SafeIcon name="user" size={18} className="inline mr-2" />
+              <button className="bg-dota-gray hover:bg-dota-red/20 text-white px-4 py-2 rounded-lg font-semibold transition-all border border-dota-red/30 hover:border-dota-red flex items-center gap-2">
+                <SafeIcon name="user" size={18} />
                 Войти
               </button>
               <button className="bg-gradient-to-r from-dota-red to-dota-accent hover:opacity-90 text-white px-6 py-2 rounded-lg font-bold transition-all glow-red">
@@ -317,7 +345,8 @@ function App() {
                   </button>
                 ))}
                 <div className="pt-4 space-y-3">
-                  <button className="w-full bg-dota-gray text-white px-4 py-3 rounded-lg font-semibold border border-dota-red/30">
+                  <button className="w-full bg-dota-gray text-white px-4 py-3 rounded-lg font-semibold border border-dota-red/30 flex items-center justify-center gap-2">
+                    <SafeIcon name="log-in" size={18} />
                     Войти
                   </button>
                   <button className="w-full bg-gradient-to-r from-dota-red to-dota-accent text-white px-4 py-3 rounded-lg font-bold">
@@ -448,12 +477,12 @@ function App() {
                   <div className="absolute inset-0 bg-gradient-to-t from-dota-dark via-transparent to-transparent" />
                   <div className="absolute top-4 right-4 flex gap-2">
                     <span className={cn(
-                      "px-2 py-1 rounded text-xs font-bold",
+                      "px-2 py-1 rounded text-xs font-bold flex items-center gap-1",
                       hero.trending === 'up' ? "bg-green-500/20 text-green-400" :
                       hero.trending === 'down' ? "bg-red-500/20 text-red-400" :
                       "bg-yellow-500/20 text-yellow-400"
                     )}>
-                      <SafeIcon name={hero.trending === 'up' ? 'trending-up' : hero.trending === 'down' ? 'activity' : 'minus'} size={12} className="inline mr-1" />
+                      <SafeIcon name={hero.trending === 'up' ? 'trending-up' : hero.trending === 'down' ? 'trending-down' : 'minus'} size={12} />
                       {hero.winrate}%
                     </span>
                   </div>
@@ -557,13 +586,13 @@ function App() {
                   <button
                     key={tab}
                     className={cn(
-                      "px-4 py-2 rounded-lg font-semibold text-sm transition-all",
+                      "px-4 py-2 rounded-lg font-semibold text-sm transition-all flex items-center gap-2",
                       i === 0 
                         ? "bg-dota-red text-white" 
                         : "text-gray-400 hover:text-white hover:bg-white/5"
                     )}
                   >
-                    {i === 0 && <span className="inline-block w-2 h-2 bg-white rounded-full mr-2 animate-pulse" />}
+                    {i === 0 && <span className="w-2 h-2 bg-white rounded-full animate-pulse" />}
                     {tab}
                   </button>
                 ))}
@@ -891,10 +920,12 @@ function App() {
               Присоединяйтесь к тысячам игроков, которые уже используют нашу платформу для достижения новых высот в Dota 2
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <button className="bg-gradient-to-r from-dota-red to-dota-accent hover:opacity-90 text-white px-10 py-4 rounded-xl text-lg font-bold transition-all transform hover:scale-105 glow-red">
+              <button className="bg-gradient-to-r from-dota-red to-dota-accent hover:opacity-90 text-white px-10 py-4 rounded-xl text-lg font-bold transition-all transform hover:scale-105 glow-red flex items-center justify-center gap-2">
+                <SafeIcon name="zap" size={20} />
                 Начать бесплатно
               </button>
-              <button className="bg-dota-gray hover:bg-dota-gray/80 text-white px-10 py-4 rounded-xl text-lg font-bold transition-all border border-white/20 hover:border-dota-red/50">
+              <button className="bg-dota-gray hover:bg-dota-gray/80 text-white px-10 py-4 rounded-xl text-lg font-bold transition-all border border-white/20 hover:border-dota-red/50 flex items-center justify-center gap-2">
+                <SafeIcon name="help-circle" size={20} />
                 Узнать больше
               </button>
             </div>
@@ -923,36 +954,37 @@ function App() {
             <div>
               <h4 className="font-bold text-white mb-4">Разделы</h4>
               <ul className="space-y-2 text-sm text-gray-500">
-                <li><button onClick={() => scrollToSection(heroesRef)} className="hover:text-dota-red transition-colors">Герои</button></li>
-                <li><button onClick={() => scrollToSection(newsRef)} className="hover:text-dota-red transition-colors">Новости</button></li>
-                <li><button onClick={() => scrollToSection(statsRef)} className="hover:text-dota-red transition-colors">Статистика</button></li>
-                <li><button onClick={() => scrollToSection(calculatorRef)} className="hover:text-dota-red transition-colors">Калькулятор</button></li>
+                <li><button onClick={() => scrollToSection(heroesRef)} className="hover:text-dota-red transition-colors flex items-center gap-2"><SafeIcon name="sword" size={14} />Герои</button></li>
+                <li><button onClick={() => scrollToSection(newsRef)} className="hover:text-dota-red transition-colors flex items-center gap-2"><SafeIcon name="calendar" size={14} />Новости</button></li>
+                <li><button onClick={() => scrollToSection(statsRef)} className="hover:text-dota-red transition-colors flex items-center gap-2"><SafeIcon name="trophy" size={14} />Статистика</button></li>
+                <li><button onClick={() => scrollToSection(calculatorRef)} className="hover:text-dota-red transition-colors flex items-center gap-2"><SafeIcon name="calculator" size={14} />Калькулятор</button></li>
               </ul>
             </div>
             
             <div>
               <h4 className="font-bold text-white mb-4">Сообщество</h4>
               <ul className="space-y-2 text-sm text-gray-500">
-                <li><button onClick={() => scrollToSection(streamsRef)} className="hover:text-dota-red transition-colors">Трансляции</button></li>
-                <li><button onClick={() => scrollToSection(forumRef)} className="hover:text-dota-red transition-colors">Форум</button></li>
-                <li><a href="#" className="hover:text-dota-red transition-colors">Discord</a></li>
-                <li><a href="#" className="hover:text-dota-red transition-colors">Telegram</a></li>
+                <li><button onClick={() => scrollToSection(streamsRef)} className="hover:text-dota-red transition-colors flex items-center gap-2"><SafeIcon name="video" size={14} />Трансляции</button></li>
+                <li><button onClick={() => scrollToSection(forumRef)} className="hover:text-dota-red transition-colors flex items-center gap-2"><SafeIcon name="message-square" size={14} />Форум</button></li>
+                <li><a href="#" className="hover:text-dota-red transition-colors flex items-center gap-2"><SafeIcon name="message-circle" size={14} />Discord</a></li>
+                <li><a href="#" className="hover:text-dota-red transition-colors flex items-center gap-2"><SafeIcon name="send" size={14} />Telegram</a></li>
               </ul>
             </div>
             
             <div>
               <h4 className="font-bold text-white mb-4">Поддержка</h4>
               <ul className="space-y-2 text-sm text-gray-500">
-                <li><a href="#" className="hover:text-dota-red transition-colors">Помощь</a></li>
-                <li><a href="#" className="hover:text-dota-red transition-colors">FAQ</a></li>
-                <li><a href="#" className="hover:text-dota-red transition-colors">Контакты</a></li>
-                <li><a href="#" className="hover:text-dota-red transition-colors">Отзывы</a></li>
+                <li><a href="#" className="hover:text-dota-red transition-colors flex items-center gap-2"><SafeIcon name="help-circle" size={14} />Помощь</a></li>
+                <li><a href="#" className="hover:text-dota-red transition-colors flex items-center gap-2"><SafeIcon name="message-circle" size={14} />FAQ</a></li>
+                <li><a href="#" className="hover:text-dota-red transition-colors flex items-center gap-2"><SafeIcon name="mail" size={14} />Контакты</a></li>
+                <li><a href="#" className="hover:text-dota-red transition-colors flex items-center gap-2"><SafeIcon name="star" size={14} />Отзывы</a></li>
               </ul>
             </div>
           </div>
           
           <div className="pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-4">
-            <div className="text-gray-600 text-sm">
+            <div className="text-gray-600 text-sm flex items-center gap-2">
+              <SafeIcon name="shield-check" size={16} />
               © 2025 Dota 2 Pro Hub. Все права защищены.
             </div>
             <div className="flex items-center gap-6">
@@ -988,7 +1020,10 @@ function App() {
                   </div>
                   <div>
                     <div className="font-bold text-white">Dota Assistant</div>
-                    <div className="text-xs text-white/80">Онлайн</div>
+                    <div className="text-xs text-white/80 flex items-center gap-1">
+                      <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
+                      Онлайн
+                    </div>
                   </div>
                 </div>
                 <button 
